@@ -1,15 +1,37 @@
-# Appwrite-Self-Host-Cloudflare-Tunnel
+<p align="center">
+  <img src="https://appwrite.io/images/logos/appwrite.svg" alt="Appwrite Logo" width="200" />
+  <br />
+   &
+  <br />
+  <img src="https://cf-assets.www.cloudflare.com/dzlvafdwdttg/735eoClKJf9XfkqCJs1mfZ/b6767158f39af8d538517df918b8fc2e/logo-white-desktop.svg" alt="Cloudflare Logo" width="200" />
+</p>
 
-A complete, production-ready Appwrite backend infrastructure with secure Cloudflare Tunnel integration for remote access without exposing public ports.
+<h1 align="center">Appwrite Self-Hosted with Cloudflare Tunnel</h1>
 
-## 🏗️ Architecture
+<p align="center">
+  A complete, production-ready Appwrite backend infrastructure with secure Cloudflare Tunnel integration
+</p>
+
+<p align="center">
+  <a href="https://github.com/rajjitlai/Appwrite-Self-Host-Cloudflare-Tunnel/stargazers">
+    <img src="https://img.shields.io/github/stars/rajjitlai/Appwrite-Self-Host-Cloudflare-Tunnel" alt="GitHub Stars">
+  </a>
+  <a href="https://github.com/rajjitlai/Appwrite-Self-Host-Cloudflare-Tunnel/issues">
+    <img src="https://img.shields.io/github/issues/rajjitlai/Appwrite-Self-Host-Cloudflare-Tunnel" alt="GitHub Issues">
+  </a>
+  <a href="https://github.com/rajjitlai/Appwrite-Self-Host-Cloudflare-Tunnel/blob/main/LICENSE">
+    <img src="https://img.shields.io/github/license/rajjitlai/Appwrite-Self-Host-Cloudflare-Tunnel" alt="License">
+  </a>
+</p>
+
+## 🏗️ Architecture Overview
 
 This self-hosted Appwrite setup features:
 - **Appwrite 1.7.4** - Backend-as-a-Service platform
 - **Traefik 2.11** - Reverse proxy with SSL termination
 - **MariaDB 10.11** - Relational database
 - **Redis 7.2.4** - In-memory cache
-- **Cloudflare Tunnel** - Secure remote access (no exposed ports)
+- **Cloudflare Tunnel** - Secure remote access (zero exposed ports)
 - **Docker Compose** - Container orchestration
 
 ## 🚀 Key Features
@@ -108,3 +130,7 @@ Key configuration options in `.env`:
 - Strong encryption with OpenSSL
 - Secure credential management
 - Git-ignored sensitive files
+
+## 📄 License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
