@@ -171,3 +171,9 @@ Key configuration options in `.env`:
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+## 📚 Additional Resources
+
+For more detailed information about Appwrite self-hosting, please refer to the official documentation:
+- [Appwrite Self-Hosting Installation Guide](https://appwrite.io/docs/advanced/self-hosting/installation)
+- [Appwrite Documentation](https://appwrite.io/docs)
