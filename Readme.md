@@ -99,6 +99,43 @@ This self-hosted Appwrite setup features:
    - Console: http://localhost/console
    - API: http://localhost
 
+## 💾 Disk Space Requirements
+
+**Initial Setup**: Approximately 2-3 GB for Docker images
+- Appwrite services: ~1.5 GB
+- MariaDB: ~400 MB
+- Redis: ~100 MB
+- Traefik: ~50 MB
+- Cloudflared: ~50 MB
+
+**Why Docker Uses So Much Space**:
+Docker on Windows can consume significant disk space due to:
+- Container images and layers
+- Volume data and logs
+- Build cache and temporary files
+- Stopped containers and unused networks
+
+**Managing Docker Disk Usage**:
+1. Clean up unused resources:
+   ```bash
+   docker system prune -a
+   ```
+   
+2. Remove unused volumes (⚠️ Deletes all data):
+   ```bash
+   docker volume prune
+   ```
+   
+3. Clean build cache:
+   ```bash
+   docker builder prune
+   ```
+   
+4. Check space usage:
+   ```bash
+   docker system df
+   ```
+
 ## ☁️ Cloudflare Tunnel Setup
 
 1. Create tunnel in Cloudflare dashboard
