@@ -983,12 +983,62 @@ networks:
 
 volumes:
   appwrite-mariadb:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/mariadb
   appwrite-redis:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/redis
   appwrite-cache:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/cache
   appwrite-uploads:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/uploads
   appwrite-imports:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/imports
   appwrite-certificates:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/certificates
   appwrite-functions:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/functions
   appwrite-sites:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/sites
   appwrite-builds:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/builds
   appwrite-config:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: ./data/config
