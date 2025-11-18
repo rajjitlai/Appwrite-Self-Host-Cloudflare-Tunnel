@@ -1,0 +1,18 @@
+# Cloudflare Tunnel Configuration
+tunnel: your-tunnel-id
+credentials-file: /etc/cloudflared/your-tunnel-id.json
+logfile: /etc/cloudflared/logs/cloudflared.log
+loglevel: info
+
+# Ingress rules for Appwrite services
+ingress:
+  # Appwrite API and Console
+  - hostname: your-domain.com
+    service: http://traefik:80
+  
+  # Appwrite Realtime
+  - hostname: realtime.your-domain.com
+    service: http://appwrite-realtime:80
+  
+  # Default catch-all rule
+  - service: http_status:404

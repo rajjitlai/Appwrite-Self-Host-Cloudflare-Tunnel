@@ -1,0 +1,48 @@
+# Environment files
+.env
+.env.*
+.env.local
+.env.production
+
+# Data directories (contains sensitive data)
+data/
+!data/.gitkeep
+
+# Logs
+*.log
+logs/
+
+# Docker volumes and containers
+.docker/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Backup files
+*.backup
+*.bak
+backup-*.tar.gz
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Cloudflare tunnel logs
+cloudflared/logs/
+
+# SSL certificates (if stored locally)
+*.pem
+*.crt
+*.key
+
+# Database dumps
+*.sql
+*.dump
