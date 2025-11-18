@@ -1,28 +1,42 @@
-# Appwrite Server Setup
+# Appwrite-Self-Host-Cloudflare-Tunnel
 
-This is a complete Appwrite backend infrastructure designed for secure, production-ready deployment using containerization.
+A complete, production-ready Appwrite backend infrastructure with secure Cloudflare Tunnel integration for remote access without exposing public ports.
 
 ## 🏗️ Architecture
 
-- Microservices orchestrated via Docker Compose
-- Cloudflare Tunnel enables secure external access without opening firewall ports
-- Local data persistence in the `./data/` directory
+This self-hosted Appwrite setup features:
+- **Appwrite 1.7.4** - Backend-as-a-Service platform
+- **Traefik 2.11** - Reverse proxy with SSL termination
+- **MariaDB 10.11** - Relational database
+- **Redis 7.2.4** - In-memory cache
+- **Cloudflare Tunnel** - Secure remote access (no exposed ports)
+- **Docker Compose** - Container orchestration
+
+## 🚀 Key Features
+
+- ✅ **Zero Port Exposure**: Secure access via Cloudflare Tunnel
+- ✅ **Local Data Persistence**: All data stored in `./data/` directory
+- ✅ **Portable Setup**: Zip and transfer entire installation
+- ✅ **Background Workers**: Audits, webhooks, deletes, builds, mails
+- ✅ **Realtime Capabilities**: WebSocket support
+- ✅ **Scheduled Tasks**: Automated maintenance jobs
+- ✅ **Built-in Monitoring**: Health checks and logging
 
 ## 📁 Directory Structure
 
 ```
 .
 ├── docker-compose.yml   # Service definitions
-├── .env                 # Environment variables (copy from .env.example)
-├── .env.example         # Environment variables example
+├── .env                 # Environment variables
+├── .env.example         # Configuration template
 ├── .gitignore
 ├── Readme.md            # This file
-├── setup.sh             # Setup script for Linux/macOS
-├── setup.bat            # Setup script for Windows
-├── cloudflared/         # Cloudflare tunnel configuration (optional)
+├── setup.sh             # Auto-setup script (Linux/macOS)
+├── setup.bat            # Auto-setup script (Windows)
+├── cloudflared/         # Cloudflare tunnel configuration
 │   ├── config.yml       # Tunnel configuration
 │   └── *.json           # Tunnel credentials
-└── data/                # Persistent volumes (created automatically)
+└── data/                # Persistent volumes
     ├── mariadb/         # MySQL data
     ├── redis/           # Redis data
     ├── uploads/         # User file uploads
@@ -34,168 +48,63 @@ This is a complete Appwrite backend infrastructure designed for secure, producti
     └── imports/
 ```
 
-## 🔧 Core Features
+## 🚀 Quick Start
 
-- Full Appwrite console and API access
-- Realtime capabilities via WebSocket
-- Background workers for audits, webhooks, deletes, builds, mails, etc.
-- Scheduled tasks and maintenance jobs
-- Built-in monitoring and health checks
-
-## 🚀 Getting Started
-
-1. **Clone this repository**
+1. **Clone repository**
    ```bash
-   git clone <repository-url>
-   cd Appwrite-Server
+   git clone https://github.com/rajjitlai/Appwrite-Self-Host-Cloudflare-Tunnel
+   cd Appwrite-Self-Host-Cloudflare-Tunnel
    ```
 
-2. **Run the setup script**
-   
-   On Linux/macOS:
+2. **Run setup**
    ```bash
+   # Linux/macOS
    ./setup.sh
-   ```
    
-   On Windows:
-   ```cmd
+   # Windows
    setup.bat
    ```
 
-3. **Edit the .env file**
-   Update the `.env` file with your secure values, especially:
-   - Database credentials
-   - Domain settings
-   - Security keys
+3. **Configure environment**
+   Edit `.env` with your secure values
 
-4. **Start the services**
+4. **Deploy**
    ```bash
    docker-compose up -d
    ```
 
-5. **Access Appwrite**
-   - **Console**: http://localhost/console
-   - **API**: http://localhost
+5. **Access**
+   - Console: http://localhost/console
+   - API: http://localhost
 
-## ☁️ Optional: Cloudflare Tunnel Setup
+## ☁️ Cloudflare Tunnel Setup
 
-For secure remote access without exposing ports, you can use Cloudflare Tunnel:
+1. Create tunnel in Cloudflare dashboard
+2. Update `cloudflared/config.yml` with your settings
+3. Add your tunnel credentials JSON file
+4. Uncomment `cloudflared` service in `docker-compose.yml`
+5. Deploy with `docker-compose up -d`
 
-1. **Create a Cloudflare Tunnel**:
-   - Log in to your Cloudflare dashboard
-   - Go to Access > Tunnels > Create a tunnel
-   - Follow the setup instructions
+## 🔧 Environment Variables
 
-2. **Configure the tunnel**:
-   - Edit `cloudflared/config.yml` with your tunnel details
-   - Update the hostname to match your domain
-   - Replace `your-tunnel-id.json` with your actual credentials file
-
-3. **Enable the service**:
-   - Uncomment the `cloudflared` service in `docker-compose.yml`
-   - Uncomment the port mappings for Traefik if needed
-
-4. **Start with Cloudflare**:
-   ```bash
-   docker-compose up -d
-   ```
-
-## 🛠️ Configuration
-
-### Environment Variables
-
-Refer to `.env.example` for all available configuration options. At a minimum, you should set:
-
-- `_APP_DOMAIN` - Your domain (default: localhost)
-- Database passwords
-- Redis password (if needed)
-- OpenSSL key for encryption
-
-### Data Persistence
-
-All data is stored in the `./data/` directory, which is automatically created when you start the services. This includes:
-- Database files
-- Uploaded files
-- Function code
-- Cache data
-- Configuration files
-
-## 🔄 Maintenance
-
-### Updating Appwrite
-
-1. Stop the services:
-   ```bash
-   docker-compose down
-   ```
-
-2. Pull the latest images:
-   ```bash
-   docker-compose pull
-   ```
-
-3. Start the services:
-   ```bash
-   docker-compose up -d
-   ```
-
-### Backup
-
-To backup your data, simply copy the `./data/` directory to a safe location.
-
-### Logs
-
-View logs for any service:
-```bash
-docker-compose logs <service-name>
-```
-
-For example:
-```bash
-docker-compose logs appwrite
-```
-
-## 🧪 Health Check
-
-You can check if the service is running properly:
-```bash
-curl http://localhost/health
-```
-
-## 🔒 Security Notes
-
-- The `.env` file is excluded from version control for security
-- All services run in isolated containers
-- No ports are exposed directly to the host (except Traefik handles HTTP/HTTPS)
-- Use strong passwords for database and Redis
-- Generate a secure OpenSSL key for `_APP_OPENSSL_KEY_V1`
+Key configuration options in `.env`:
+- `_APP_DOMAIN` - Your domain
+- Database credentials
+- Redis configuration
+- OpenSSL encryption key
+- SMTP settings (optional)
 
 ## 📦 Portability
 
-This setup is completely portable - you can:
-1. Zip the entire directory
-2. Transfer to another machine
-3. Unzip and run `docker-compose up -d`
+- Entire setup is completely portable
+- Zip directory and transfer to any Docker-enabled system
+- All data persists in local `./data/` directory
+- No external dependencies required
 
-All data will be preserved in the `./data/` directory, making this a truly portable Appwrite installation.
+## 🔒 Security
 
-## 🆘 Troubleshooting
-
-### Common Issues
-
-1. **Port already in use**: Make sure ports 80 and 443 are free on your host
-2. **Permission errors**: Ensure Docker has permission to bind mount the data directories
-3. **Database connection issues**: Check database credentials in `.env`
-
-### Reset Everything
-
-To completely reset your installation:
-```bash
-docker-compose down -v
-rm -rf data/
-```
-
-Then start fresh with:
-```bash
-docker-compose up -d
-```
+- No ports exposed to internet
+- Cloudflare Tunnel for secure access
+- Strong encryption with OpenSSL
+- Secure credential management
+- Git-ignored sensitive files
