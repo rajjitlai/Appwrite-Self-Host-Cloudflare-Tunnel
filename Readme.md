@@ -2,6 +2,8 @@
 
 A complete, production-ready Appwrite backend infrastructure setup with secure Cloudflare Tunnel integration.
 
+![Appwrite Cloudflare Tunnel Preview](assets/preview.png)
+
 This repository offers two configurations for hosting Appwrite:
 1. **`default-mongodb` (Default Setup)**: Appwrite 1.9.0's official default setup utilizing **MongoDB (v8.2)** as the database backend. It runs out of the box using Docker-managed named volumes.
 2. **`custom-mariadb` (Custom Setup)**: A database configuration utilizing **MariaDB (v10.11)** as the database backend. It runs using Docker-managed named volumes and includes a pre-configured database healthcheck.
