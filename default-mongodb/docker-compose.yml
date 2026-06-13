@@ -998,16 +998,16 @@ services:
         INIT_FLAG="/data/db/.mongodb_initialized"
 
         # Generate keyfile if it doesn't exist
-        if [ ! -f "$KEYFILE_PATH" ]; then
+        if [ ! -f "$$KEYFILE_PATH" ]; then
           echo "Generating random MongoDB keyfile..."
           mkdir -p /data/keyfile
-          openssl rand -base64 756 > "$KEYFILE_PATH"
+          openssl rand -base64 756 > "$$KEYFILE_PATH"
         fi
-        chmod 400 "$KEYFILE_PATH"
-        chown mongodb:mongodb "$KEYFILE_PATH" 2>/dev/null || chown 999:999 "$KEYFILE_PATH"
+        chmod 400 "$$KEYFILE_PATH"
+        chown mongodb:mongodb "$$KEYFILE_PATH" 2>/dev/null || chown 999:999 "$$KEYFILE_PATH"
 
         # If not initialized, start without auth first to set up replica set and users
-        if [ ! -f "$INIT_FLAG" ]; then
+        if [ ! -f "$$INIT_FLAG" ]; then
           echo "First-time initialization: starting MongoDB without auth..."
           mongod --replSet rs0 --bind_ip_all --fork --logpath /var/log/mongodb/mongod.log --dbpath /data/db
 
@@ -1021,23 +1021,23 @@ services:
           sleep 5
 
           echo "Creating root user..."
-          mongosh admin --eval "db.createUser({user: '$MONGO_INITDB_ROOT_USERNAME', pwd: '$MONGO_INITDB_ROOT_PASSWORD', roles: ['root']})"
+          mongosh admin --eval "db.createUser({user: '$$MONGO_INITDB_ROOT_USERNAME', pwd: '$$MONGO_INITDB_ROOT_PASSWORD', roles: ['root']})"
 
           echo "Creating application user..."
-          mongosh admin --eval "db.createUser({user: '$MONGO_INITDB_USERNAME', pwd: '$MONGO_INITDB_PASSWORD', roles: [{role: 'readWrite', db: '$MONGO_INITDB_DATABASE'}]})"
+          mongosh admin --eval "db.createUser({user: '$$MONGO_INITDB_USERNAME', pwd: '$$MONGO_INITDB_PASSWORD', roles: [{role: 'readWrite', db: '$$MONGO_INITDB_DATABASE'}]})"
 
           echo "Shutting down MongoDB..."
           mongod --dbpath /data/db --shutdown
 
-          touch "$INIT_FLAG"
+          touch "$$INIT_FLAG"
           echo "Initialization complete."
         fi
 
         echo "Starting MongoDB with authentication..."
-        exec mongod --replSet rs0 --bind_ip_all --auth --keyFile "$KEYFILE_PATH"
+        exec mongod --replSet rs0 --bind_ip_all --auth --keyFile "$$KEYFILE_PATH"
     healthcheck:
       test: |
-        mongosh -u root -p "$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --quiet --eval "rs.status().ok" | grep -q 1
+        mongosh -u root -p "$$MONGO_INITDB_ROOT_PASSWORD" --authenticationDatabase admin --quiet --eval "rs.status().ok" | grep -q 1
       interval: 10s
       timeout: 10s
       retries: 10
