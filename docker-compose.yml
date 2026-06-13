@@ -6,7 +6,7 @@ x-logging: &x-logging
       max-size: '10m'
 services:
   traefik:
-    image: traefik:2.11
+    image: traefik:3.6
     container_name: appwrite-traefik
     <<: *x-logging
     command:
@@ -19,8 +19,8 @@ services:
       - --entrypoints.appwrite_websecure.address=:443
     restart: unless-stopped
     ports:
-      - 80:80
-      - 443:443
+      - 127.0.0.1:80:80
+      - 127.0.0.1:443:443
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
       - appwrite-config:/storage/config:ro
@@ -32,7 +32,7 @@ services:
       - appwrite
 
   appwrite:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     container_name: appwrite
     <<: *x-logging
     restart: unless-stopped
@@ -62,8 +62,10 @@ services:
       - appwrite-sites:/storage/sites:rw
       - appwrite-builds:/storage/builds:rw
     depends_on:
-      - mariadb
-      - redis
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
 #      - clamav
     environment:
       - _APP_ENV
@@ -172,7 +174,7 @@ services:
   appwrite-console:
     <<: *x-logging
     container_name: appwrite-console
-    image: appwrite/console:7.4.7
+    image: appwrite/console:7.8.26
     restart: unless-stopped
     networks:
       - appwrite
@@ -192,7 +194,7 @@ services:
       - traefik.http.routers.appwrite_console_https.tls=true
 
   appwrite-realtime:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: realtime
     container_name: appwrite-realtime
     <<: *x-logging
@@ -214,8 +216,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - mariadb
-      - redis
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -235,7 +239,7 @@ services:
       - _APP_LOGGING_CONFIG
 
   appwrite-worker-audits:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-audits
     <<: *x-logging
     container_name: appwrite-worker-audits
@@ -243,8 +247,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
-      - mariadb
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -261,7 +267,7 @@ services:
       - _APP_LOGGING_CONFIG
 
   appwrite-worker-webhooks:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-webhooks
     <<: *x-logging
     container_name: appwrite-worker-webhooks
@@ -269,8 +275,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
-      - mariadb
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -289,7 +297,7 @@ services:
       - _APP_LOGGING_CONFIG
 
   appwrite-worker-deletes:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-deletes
     <<: *x-logging
     container_name: appwrite-worker-deletes
@@ -297,8 +305,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
-      - mariadb
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     volumes:
       - appwrite-uploads:/storage/uploads:rw
       - appwrite-cache:/storage/cache:rw
@@ -352,7 +362,7 @@ services:
       - _APP_EMAIL_CERTIFICATES
 
   appwrite-worker-databases:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-databases
     <<: *x-logging
     container_name: appwrite-worker-databases
@@ -360,8 +370,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
-      - mariadb
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -378,7 +390,7 @@ services:
       - _APP_LOGGING_CONFIG
 
   appwrite-worker-builds:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-builds
     <<: *x-logging
     container_name: appwrite-worker-builds
@@ -386,8 +398,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
-      - mariadb
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     volumes:
       - appwrite-functions:/storage/functions:rw
       - appwrite-sites:/storage/sites:rw
@@ -446,7 +460,7 @@ services:
       - _APP_DOMAIN_SITES
 
   appwrite-worker-certificates:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-certificates
     <<: *x-logging
     container_name: appwrite-worker-certificates
@@ -454,8 +468,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
-      - mariadb
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     volumes:
       - appwrite-config:/storage/config:rw
       - appwrite-certificates:/storage/certificates:rw
@@ -483,7 +499,7 @@ services:
       - _APP_LOGGING_CONFIG
 
   appwrite-worker-functions:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-functions
     <<: *x-logging
     container_name: appwrite-worker-functions
@@ -491,8 +507,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
-      - mariadb
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
       - openruntimes-executor
     environment:
       - _APP_ENV
@@ -522,7 +540,7 @@ services:
       - _APP_LOGGING_CONFIG
 
   appwrite-worker-mails:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-mails
     <<: *x-logging
     container_name: appwrite-worker-mails
@@ -530,7 +548,8 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -556,7 +575,7 @@ services:
       - _APP_OPTIONS_FORCE_HTTPS
 
   appwrite-worker-messaging:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-messaging
     <<: *x-logging
     container_name: appwrite-worker-messaging
@@ -566,7 +585,8 @@ services:
     volumes:
       - appwrite-uploads:/storage/uploads:rw
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -607,7 +627,7 @@ services:
       - _APP_STORAGE_WASABI_BUCKET
 
   appwrite-worker-migrations:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-migrations
     <<: *x-logging
     container_name: appwrite-worker-migrations
@@ -617,7 +637,8 @@ services:
     volumes:
       - appwrite-imports:/storage/imports:rw
     depends_on:
-      - mariadb
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -643,7 +664,7 @@ services:
       - _APP_MIGRATIONS_FIREBASE_CLIENT_SECRET
 
   appwrite-task-maintenance:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: maintenance
     <<: *x-logging
     container_name: appwrite-task-maintenance
@@ -651,7 +672,8 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -682,7 +704,7 @@ services:
       - _APP_MAINTENANCE_RETENTION_SCHEDULES
 
   appwrite-task-stats-resources:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     container_name: appwrite-task-stats-resources
     entrypoint: stats-resources
     <<: *x-logging
@@ -690,8 +712,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
-      - mariadb
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -711,7 +735,7 @@ services:
       - _APP_STATS_RESOURCES_INTERVAL
 
   appwrite-worker-stats-resources:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-stats-resources
     container_name: appwrite-worker-stats-resources
     <<: *x-logging
@@ -719,8 +743,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
-      - mariadb
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -739,7 +765,7 @@ services:
       - _APP_STATS_RESOURCES_INTERVAL
 
   appwrite-worker-stats-usage:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: worker-stats-usage
     container_name: appwrite-worker-stats-usage
     <<: *x-logging
@@ -747,8 +773,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - redis
-      - mariadb
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -767,7 +795,7 @@ services:
       - _APP_USAGE_AGGREGATION_INTERVAL
 
   appwrite-task-scheduler-functions:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: schedule-functions
     container_name: appwrite-task-scheduler-functions
     <<: *x-logging
@@ -775,8 +803,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - mariadb
-      - redis
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -792,7 +822,7 @@ services:
       - _APP_DB_PASS
 
   appwrite-task-scheduler-executions:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: schedule-executions
     container_name: appwrite-task-scheduler-executions
     <<: *x-logging
@@ -800,8 +830,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - mariadb
-      - redis
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -817,7 +849,7 @@ services:
       - _APP_DB_PASS
 
   appwrite-task-scheduler-messages:
-    image: appwrite/appwrite:1.8.0
+    image: appwrite/appwrite:1.9.0
     entrypoint: schedule-messages
     container_name: appwrite-task-scheduler-messages
     <<: *x-logging
@@ -825,8 +857,10 @@ services:
     networks:
       - appwrite
     depends_on:
-      - mariadb
-      - redis
+      redis:
+        condition: service_healthy
+      mariadb:
+        condition: service_healthy
     environment:
       - _APP_ENV
       - _APP_WORKER_PER_CORE
@@ -842,7 +876,7 @@ services:
       - _APP_DB_PASS
 
   appwrite-assistant:
-    image: appwrite/assistant:0.8.3
+    image: appwrite/assistant:0.8.4
     container_name: appwrite-assistant
     <<: *x-logging
     restart: unless-stopped
@@ -852,7 +886,7 @@ services:
       - _APP_ASSISTANT_OPENAI_API_KEY
       
   appwrite-browser:
-    image: appwrite/browser:0.2.4
+    image: appwrite/browser:0.3.2
     container_name: appwrite-browser
     <<: *x-logging
     restart: unless-stopped
@@ -927,9 +961,15 @@ services:
       - MYSQL_PASSWORD=${_APP_DB_PASS}
       - MARIADB_AUTO_UPGRADE=1
     command: 'mysqld --innodb-flush-method=fsync'
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 10s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
 
   redis:
-    image: redis:7.2.4-alpine
+    image: redis:7.4.7-alpine
     container_name: appwrite-redis
     <<: *x-logging
     restart: unless-stopped
@@ -942,6 +982,12 @@ services:
       - appwrite
     volumes:
       - appwrite-redis:/data:rw
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
 
   # clamav:
   #   image: appwrite/clamav:1.2.0

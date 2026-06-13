@@ -9,6 +9,10 @@ ingress:
   # Appwrite API and Console
   - hostname: your-domain.com
     service: http://traefik:80
+
+  # Appwrite Sites (wildcard subdomain)
+  - hostname: '*.sites.your-domain.com'
+    service: http://traefik:80
   
   # Appwrite Realtime
   - hostname: realtime.your-domain.com
