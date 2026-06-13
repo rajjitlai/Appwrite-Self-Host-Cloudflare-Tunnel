@@ -45,3 +45,6 @@ cloudflared/logs/
 # Database dumps
 *.sql
 *.dump
+
+# Local draft files
+Blog.md
